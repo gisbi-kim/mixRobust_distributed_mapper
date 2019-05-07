@@ -1,0 +1,11 @@
+%YAML:1.0
+Dataset.dir: /media/D/robust_distributed_mapper/test_data/datasets/CSAIL/spilt_190random/
+Max.iter: 10000
+Rotation.threshold: 1e-1
+Pose.threshold: 1e-1
+Confidence.probability: 0.99
+PCM: 0
+DCS: 1
+DCS.phir: 0.1
+DCS.phip: 1
+PCMHeu: 0
