@@ -307,7 +307,11 @@ class DistributedMapper{
 
     /** @brief retractPose3Global performs global retraction using linearizedPoses and initial */
     void retractPose3Global(){
-      initial_ = evaluation_utils::retractPose3Global(initial_, linearized_poses_);
+        if(use_DCS_){
+            initial_ = evaluation_utils::retractPose3Global(originInitial_, linearized_poses_);
+        }else {
+            initial_ = evaluation_utils::retractPose3Global(initial_, linearized_poses_);
+        }
     }
 
     /** @brief linearizedRotationAt returns the current rotation estimate at sym */
