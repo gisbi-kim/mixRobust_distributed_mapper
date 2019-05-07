@@ -44,7 +44,7 @@ for i = 1 : outliers
 end
 
 %% create random outliers
-for i=1:90
+for i=1:20
     v1 = randi(trajectory_size-groupSize);
     v2 = randi(trajectory_size-groupSize);
     %% create gaussian loop closure constraint

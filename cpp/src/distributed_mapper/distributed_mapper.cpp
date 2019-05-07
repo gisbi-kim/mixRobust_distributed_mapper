@@ -318,14 +318,17 @@ DistributedMapper::estimatePoses(){
               Rot3 rotation = initial_.at<Pose3>(key0).rotation();
               SharedNoiseModel chordal_noise = evaluation_utils::convertToChordalNoise(pose3_between->get_noiseModel(),
                                                                                        rotation.matrix());
-              noiseModel::Robust::shared_ptr robust = noiseModel::Robust::Create(noiseModel::mEstimator::DCS::Create(DCS_phip_),
-                                                                                 chordal_noise);
-
-              robust->WhitenSystem(A,b);
+//              noiseModel::Robust::shared_ptr robust = noiseModel::Robust::Create(noiseModel::mEstimator::DCS::Create(DCS_phip_),
+//                                                                                 chordal_noise);
+//
+//              robust->WhitenSystem(A,b);
+                chordal_noise->WhitenSystem(A,b);
+                reweightDCS4pose(A,b,errorAncor);
             } else{
-              noiseModel::Robust::shared_ptr robust = noiseModel::Robust::Create(noiseModel::mEstimator::DCS::Create(DCS_phip_),
-                                                                                 pose_noise_model_);
-              robust->WhitenSystem(A,b);
+//              noiseModel::Robust::shared_ptr robust = noiseModel::Robust::Create(noiseModel::mEstimator::DCS::Create(DCS_phip_),
+//                                                                                 pose_noise_model_);
+//              robust->WhitenSystem(A,b);
+                reweightDCS4pose(A,b,errorAncor);
             }
           }else{
             if (use_between_noise_) {
@@ -341,8 +344,8 @@ DistributedMapper::estimatePoses(){
     else if(robot1 == robotName_){ // robot i owns the second key
         if(!use_flagged_init_ || neighboring_robots_initialized_[robot0]){ // if use flagged initialization and robot sharing the edge is already optimized            
             Vector error = between_chordal_factor.evaluateError(neighbors_.at<Pose3>(key0), initial_.at<Pose3>(key1), M0, M1);
-//            Vector errorAncor = between_chordal_factor.evaluateError(originInitial_.at<Pose3>(key0),
-//                                                                     originNeighbor_.at<Pose3>(key1));
+            Vector errorAncor = between_chordal_factor.evaluateError(originNeighbor_.at<Pose3>(key0),
+                                                                     originInitial_.at<Pose3>(key1));
             // Robot i owns the second key_i, on which we put a prior
             Matrix A = M1;
             Vector b = -(M0 * neighbors_linearized_poses_.at(key0) + error);
@@ -353,13 +356,16 @@ DistributedMapper::estimatePoses(){
               Rot3 rotation = initial_.at<Pose3>(key0).rotation();
               SharedNoiseModel chordal_noise = evaluation_utils::convertToChordalNoise(pose3_between->get_noiseModel(),
                                                                                        rotation.matrix());
-              noiseModel::Robust::shared_ptr robust = noiseModel::Robust::Create(noiseModel::mEstimator::DCS::Create(DCS_phip_),
-                                                                                 chordal_noise);
-              robust->WhitenSystem(A,b);
+//              noiseModel::Robust::shared_ptr robust = noiseModel::Robust::Create(noiseModel::mEstimator::DCS::Create(DCS_phip_),
+//                                                                                 chordal_noise);
+//              robust->WhitenSystem(A,b);
+                chordal_noise->WhitenSystem(A, b);
+                reweightDCS4pose(A, b, errorAncor);
             } else{
-              noiseModel::Robust::shared_ptr robust = noiseModel::Robust::Create(noiseModel::mEstimator::DCS::Create(DCS_phip_),
-                                                                                 pose_noise_model_);
-              robust->WhitenSystem(A,b);
+//              noiseModel::Robust::shared_ptr robust = noiseModel::Robust::Create(noiseModel::mEstimator::DCS::Create(DCS_phip_),
+//                                                                                 pose_noise_model_);
+//              robust->WhitenSystem(A,b);
+                reweightDCS4pose(A, b, errorAncor);
             }
           }else{
             if (use_between_noise_) {
