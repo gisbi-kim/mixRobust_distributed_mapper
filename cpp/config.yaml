@@ -6,6 +6,6 @@ Pose.threshold: 1e-1
 Confidence.probability: 0.99
 PCM: 0
 DCS: 1
-DCS.phir: 1
-DCS.phip: 1
+DCS.phir: 0.01
+DCS.phip: 0.5
 PCMHeu: 0

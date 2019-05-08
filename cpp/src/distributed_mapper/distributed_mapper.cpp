@@ -190,6 +190,7 @@ DistributedMapper::estimateRotation(){
         if(use_DCS_){
           Vector r0 = linearized_rotation_.at(key0);
           Vector errorV = M9*r0 - r1;
+            std::cout<< errorV.norm()<<std::endl;
           reweightDCS4rot(M9, r1, errorV);
         }
         rot_subgraph.add(key0, M9, r1, model);
@@ -318,6 +319,7 @@ DistributedMapper::estimatePoses(){
             A = M0;
             b = -(M1 * neighbors_linearized_poses_.at(key1) + errorAncor);
             Vector errorV = A*linearized_poses_.at(key0) - b;
+              std::cout << errorV.norm()<< "  " << edge_number++ << std::endl;
             if (use_between_noise_) {
               Rot3 rotation = initial_.at<Pose3>(key0).rotation();
               SharedNoiseModel chordal_noise = evaluation_utils::convertToChordalNoise(pose3_between->get_noiseModel(),
