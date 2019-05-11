@@ -315,13 +315,18 @@ class DistributedMapper{
         }
     }
     /** @brief retractPose3Globalforplot *********************************************************************************/
-    void retractPose3Global4plot(){
+    void retractPose3Global4plot(bool isfirst=false){
        if(use_DCS_) {
            initial_ = evaluation_utils::retractPose3Global(originInitial_, linearized_poses_);
            neighbors_ = evaluation_utils::retractPose3Global(originNeighbor_, neighbors_linearized_poses_);
        }else{
-           initial_ = evaluation_utils::retractPose3Global(initial_, linearized_poses_);
-           neighbors_ = evaluation_utils::retractPose3Global(neighbors_, neighbors_linearized_poses_);
+           if(isfirst){
+               initial_ = originInitial_;
+               neighbors_ = originNeighbor_;
+           }else {
+               initial_ = evaluation_utils::retractPose3Global(initial_, linearized_poses_);
+               neighbors_ = evaluation_utils::retractPose3Global(neighbors_, neighbors_linearized_poses_);
+           }
        }
 
 

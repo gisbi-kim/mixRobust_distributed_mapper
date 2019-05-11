@@ -16,7 +16,7 @@ namespace distributed_mapper{
 
         void Run();
 
-        void setDistMappers(const std::vector<boost::shared_ptr<DistributedMapper> > &dist_mappers);
+        void setDistMappers(const std::vector<boost::shared_ptr<DistributedMapper> > &dist_mappers, bool isfirst=false);
 
     protected:
         vector<DistributedMapper> distMappers;

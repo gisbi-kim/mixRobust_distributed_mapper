@@ -319,7 +319,7 @@ DistributedMapper::estimatePoses(){
             A = M0;
             b = -(M1 * neighbors_linearized_poses_.at(key1) + errorAncor);
             Vector errorV = A*linearized_poses_.at(key0) - b;
-             // std::cout << errorV.norm()<< "  " << edge_number++ << std::endl;
+             //std::cout << errorV.norm()<< "  " << edge_number++ << std::endl;
             if (use_between_noise_) {
               Rot3 rotation = initial_.at<Pose3>(key0).rotation();
               SharedNoiseModel chordal_noise = evaluation_utils::convertToChordalNoise(pose3_between->get_noiseModel(),

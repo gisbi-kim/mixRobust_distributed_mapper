@@ -15,12 +15,12 @@ namespace distributed_mapper{
       readColors();
     }
 
-    void MapDrawer::setDistMappers(const std::vector<boost::shared_ptr<DistributedMapper> > &dist_mappers) {
+    void MapDrawer::setDistMappers(const std::vector<boost::shared_ptr<DistributedMapper> > &dist_mappers,bool isfirst) {
         unique_lock<mutex> lock(muDistri);
         distMappers.clear();
         for(const boost::shared_ptr<DistributedMapper>& dist_mapper : dist_mappers){
             DistributedMapper distmap = *dist_mapper;
-            distmap.retractPose3Global4plot();
+            distmap.retractPose3Global4plot(isfirst);
             distMappers.emplace_back(distmap);
         }
     }

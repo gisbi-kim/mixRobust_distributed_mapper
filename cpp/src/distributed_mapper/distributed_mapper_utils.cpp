@@ -412,9 +412,9 @@ void optimizePose(std::vector< boost::shared_ptr<DistributedMapper> >& dist_mapp
 
     if(debug)
       std::cout << "[optimizePoses] Loop over robots complete"  << std::endl;
-
+      sleep(3);
      mapDrawer->setDistMappers(dist_mappers);
-     sleep(3);
+
 
     // If DistributeJacobi/Jacobi OverRelaxation, we update all the robots at the end of each iteration
     for(size_t robot: ordering){   // Iterate over each robot
@@ -609,7 +609,7 @@ distributedOptimizer(std::vector< boost::shared_ptr<DistributedMapper> >& dist_m
     //Initial View thread
     //viewer thread
     MapDrawer* mpViewer = new MapDrawer();
-    mpViewer->setDistMappers(dist_mappers);
+    mpViewer->setDistMappers(dist_mappers,true);
     std::thread* mptViewer = new thread(&MapDrawer::Run,mpViewer);
 
   ////////////////////////////////////////////////////////////////////////////////////////////
