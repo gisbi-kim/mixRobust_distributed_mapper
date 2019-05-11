@@ -309,11 +309,23 @@ class DistributedMapper{
     void retractPose3Global(){
         if(use_DCS_){
             initial_ = evaluation_utils::retractPose3Global(originInitial_, linearized_poses_);
+
         }else {
             initial_ = evaluation_utils::retractPose3Global(initial_, linearized_poses_);
         }
     }
+    /** @brief retractPose3Globalforplot *********************************************************************************/
+    void retractPose3Global4plot(){
+       if(use_DCS_) {
+           initial_ = evaluation_utils::retractPose3Global(originInitial_, linearized_poses_);
+           neighbors_ = evaluation_utils::retractPose3Global(originNeighbor_, neighbors_linearized_poses_);
+       }else{
+           initial_ = evaluation_utils::retractPose3Global(initial_, linearized_poses_);
+           neighbors_ = evaluation_utils::retractPose3Global(neighbors_, neighbors_linearized_poses_);
+       }
 
+
+    }
     /** @brief linearizedRotationAt returns the current rotation estimate at sym */
     gtsam::Vector linearizedRotationAt(const gtsam::Key& key){ return linearized_rotation_.at(key); }
 

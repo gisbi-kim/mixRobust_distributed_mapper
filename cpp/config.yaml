@@ -1,11 +1,13 @@
 %YAML:1.0
-Dataset.dir: /media/D/robust_distributed_mapper/test_data/datasets/CSAIL/spilt_0.2random/
-Max.iter: 1000
+#Dataset.dir: /media/D/robust_distributed_mapper/test_data/datasets/CSAIL/spilt_0.2random/
+Dataset.dir: /media/D/robust_distributed_mapper/test_data/distributed_mapper/example_49robots/
+Robots.number: 49
+Max.iter: 100000
 Rotation.threshold: 1e-1
-Pose.threshold: 1e-1
+Pose.threshold: 1e-7
 Confidence.probability: 0.99
 PCM: 0
-DCS: 1
+DCS: 0
 DCS.phir: 0.01
 DCS.phip: 0.5
 PCMHeu: 0

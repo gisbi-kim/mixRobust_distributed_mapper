@@ -312,6 +312,7 @@ void optimizePose(std::vector< boost::shared_ptr<DistributedMapper> >& dist_mapp
                   const std::vector<size_t>& ordering,
                   const bool& debug,
                   const double& pose_estimate_change_threshold,
+                  MapDrawer* mapDrawer,
                   const bool& use_landmarks,
                   boost::optional<std::vector<gtsam::Values>&> pose_trace,
                   boost::optional<std::vector<gtsam::Values>&> subgraph_pose_trace,
@@ -412,6 +413,7 @@ void optimizePose(std::vector< boost::shared_ptr<DistributedMapper> >& dist_mapp
     if(debug)
       std::cout << "[optimizePoses] Loop over robots complete"  << std::endl;
 
+     mapDrawer->setDistMappers(dist_mappers);
 
     // If DistributeJacobi/Jacobi OverRelaxation, we update all the robots at the end of each iteration
     for(size_t robot: ordering){   // Iterate over each robot
@@ -603,7 +605,11 @@ distributedOptimizer(std::vector< boost::shared_ptr<DistributedMapper> >& dist_m
       evaluation_utils::printKeys(dist_mappers[robot]->currentEstimate());
     }
   }
-
+    //Initial View thread
+    //viewer thread
+    MapDrawer* mpViewer = new MapDrawer();
+    mpViewer->setDistMappers(dist_mappers);
+    std::thread* mptViewer = new thread(&MapDrawer::Run,mpViewer);
 
   ////////////////////////////////////////////////////////////////////////////////////////////
   // Iterate poses
@@ -621,6 +627,7 @@ distributedOptimizer(std::vector< boost::shared_ptr<DistributedMapper> >& dist_m
                ordering,
                debug,
                pose_estimate_change_threshold,
+               mpViewer,
                use_landmarks,
                pose_trace,
                subgraph_pose_trace,

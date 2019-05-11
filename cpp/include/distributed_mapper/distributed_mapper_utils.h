@@ -5,9 +5,11 @@
 #include <algorithm>
 #include <map>
 #include <utility>
-
-
+#include "distributed_mapper/map_drawer.h"
+#include <thread>
 namespace distributed_mapper{
+
+
 
 /**
  * @brief orderRobots orders the robots using flagged init
@@ -77,6 +79,7 @@ void optimizePose(std::vector< boost::shared_ptr<DistributedMapper> >& dist_mapp
                   const std::vector<size_t> &ordering,
                   const bool& debug,
                   const double& pose_estimate_change_threshold,
+                  MapDrawer& mapDrawer,
                   const bool& use_landmarks = false,
                   boost::optional<std::vector<gtsam::Values>&> pose_trace = boost::none,
                   boost::optional<std::vector<gtsam::Values>&> subgraph_pose_trace = boost::none,

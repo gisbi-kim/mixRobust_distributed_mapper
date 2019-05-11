@@ -78,6 +78,7 @@ int main(int argc, char *argv[]) {
     double DCS_phir = 1.0;
     double DCS_phip = 1.0;
 
+    nr_robots = Config::get<int>("Robots.number");
     data_dir = Config::get<string>("Dataset.dir");
     int use_PCM_index = Config::get<int>("PCM");
     if(use_PCM_index)  use_PCM = true;

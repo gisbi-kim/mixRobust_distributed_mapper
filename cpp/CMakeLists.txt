@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 project(distributed-mapper)
 set(CMAKE_BUILD_TYPE "Debug")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -o2 -fPIC")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -o2 -fPIC -pthread")
 add_definitions(-DLOG_DIR="${PROJECT_SOURCE_DIR}/..")
 
 ###########################################################################
@@ -24,7 +24,7 @@ link_libraries(${Boost_LIBRARIES})
 message("Boost Libraries: ${Boost_LIBRARIES}")
 
 find_package(OpenCV  REQUIRED)
-
+find_package(Pangolin REQUIRED)
 ###########################################################################
 # Pairwise Consistency Maximization
 
@@ -34,6 +34,7 @@ include_directories(
   include/pairwise_consistency_maximization
   ${CMAKE_CURRENT_SOURCE_DIR}/src/pairwise_consistency_maximization/third_parties/fast_max-clique_finder/src/
   ${OpenCV_INCLUDE_DIRS}
+  ${Pangolin_INCLUDE_DIRS}
 )
 
 # Graph utils library
@@ -101,12 +102,14 @@ add_library (distributed_mapper
         include/distributed_mapper/distributed_mapper_utils.h
         src/distributed_mapper/distributed_mapper_utils.cpp
         src/distributed_mapper/run_distributed_mapper.cpp
-        )
+        include/distributed_mapper/map_drawer.h
+        src/distributed_mapper/map_drawer.cpp )
 
 target_link_libraries(distributed_mapper
         ${Boost_LIBRARIES}
         gtsam
-        distributed_pcm)
+        distributed_pcm
+        ${Pangolin_LIBRARIES})
 
 ###########################################################################
 # Add example executable
