@@ -19,7 +19,9 @@ namespace distributed_mapper{
         unique_lock<mutex> lock(muDistri);
         distMappers.clear();
         for(const boost::shared_ptr<DistributedMapper>& dist_mapper : dist_mappers){
-            distMappers.emplace_back(*dist_mapper);
+            DistributedMapper distmap = *dist_mapper;
+            distmap.retractPose3Global4plot();
+            distMappers.emplace_back(distmap);
         }
     }
 
@@ -31,7 +33,7 @@ namespace distributed_mapper{
         for(DistributedMapper& distMapper: distMappers){
             color+=colorStep;
             NonlinearFactorGraph graph = distMapper.currentGraph();
-            distMapper.retractPose3Global4plot();
+            //distMapper.retractPose3Global4plot();
             Values estimate = distMapper.currentEstimate();
             Values neighbors = distMapper.neighbors();
             char robotName = distMapper.robotName();

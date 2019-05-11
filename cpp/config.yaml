@@ -1,6 +1,6 @@
 %YAML:1.0
 #Dataset.dir: /media/D/robust_distributed_mapper/test_data/datasets/CSAIL/spilt_0.2random/
-Dataset.dir: /media/D/robust_distributed_mapper/test_data/distributed_mapper/example_49robots/
+Dataset.dir: /home/siukeung/projects/robust_distributed_mapper/test_data/distributed_mapper/example_49robots/
 Robots.number: 49
 Max.iter: 100000
 Rotation.threshold: 1e-1
