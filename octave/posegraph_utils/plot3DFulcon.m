@@ -55,8 +55,8 @@ for i = 0 : graph.size - 1
         end
     end
     hold on
-   % xlim([-60 60])
-    %ylim([-60 60])
+    xlim([-60 60])
+    ylim([-60 60])
 
 end
 % plot refused outlier inter edge

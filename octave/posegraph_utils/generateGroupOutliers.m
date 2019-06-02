@@ -1,4 +1,4 @@
-function [ spoiled_measurements, spoiled_edges_id ,loopclosures] = generateGroupOutliers( robot_edges_id, robots_offsets,  trajectory_size, outliers,  groupSize)
+function [ spoiled_measurements, spoiled_edges_id ,loopclosures] = generateGroupOutliers( robot_edges_id, robots_offsets,  trajectory_size, outliers,  groupSize, randomSize)
 
 edges_id1 = robot_edges_id{1};
 edges_id2 = robot_edges_id{2};
@@ -44,7 +44,7 @@ for i = 1 : outliers
 end
 
 %% create random outliers
-for i=1:20
+for i=1:randomSize
     v1 = randi(trajectory_size-groupSize);
     v2 = randi(trajectory_size-groupSize);
     %% create gaussian loop closure constraint

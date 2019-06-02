@@ -4,7 +4,7 @@ clc
 
 %% settings
 ori_folder = horzcat(pwd, '/../test_data/datasets/city10000/originalDataset/part_city10000.g2o');
-spilt_folder = horzcat(pwd, '/../test_data/datasets/city10000/spilt_part_5out20group/');
+spilt_folder = horzcat(pwd, '/../test_data/datasets/city10000/spiltPart0020/');
 mkdir(spilt_folder);
 number_of_robots = 2;
 id_offset = 96;
@@ -14,7 +14,7 @@ for robot=1:number_of_robots
     robots_offsets{robot} = bitshift(uint64(robot+id_offset), 56); % GTSAM format
 end
 %% Generate file names
-file_names = {};
+file_names = {};  
 for robot=1:number_of_robots
     file_names{end+1} = horzcat(spilt_folder,num2str(robot-1),'.g2o');
 end
@@ -33,6 +33,6 @@ end
  
  %% generate inter loopclosure outliers
  [ spoiled_measurements, spoiled_edges_id ,loopclosures] = generateGroupOutliers( robot_edges_id, robots_offsets, ...
-    trajectory_size, 5,  20);
+    trajectory_size, 0,  0, 20);
  writeG2oDataset3D(file_names{1}, spoiled_measurements, spoiled_edges_id, [], 0, 1 );
  writeG2oDataset3D(file_names{2}, spoiled_measurements, spoiled_edges_id, [], 0, 1 );
