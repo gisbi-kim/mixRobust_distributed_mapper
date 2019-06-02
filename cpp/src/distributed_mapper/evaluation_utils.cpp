@@ -479,12 +479,99 @@ namespace evaluation_utils{
     return make_pair(combined_graph, combined_values);
   }
 
+    void alignPose(gtsam::Values& estimates, gtsam::Values grounds){
+
+      int N = estimates.size();
+      Eigen::Vector3d p1(0,0,0),p2(0,0,0);
+      vector<Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d>> q1(N),q2(N); //vector遍历前要预先分配内存
+      for(const Values::ConstKeyValuePair& key_value : estimates){
+        Key key = key_value.key;
+        Pose3 estimate = estimates.at<Pose3>(key);
+        Pose3 ground = grounds.at<Pose3>(key);
+        Eigen::Vector3d te = estimate.translation().vector();
+        Eigen::Vector3d tg = ground.translation().vector();
+        p1 += te;
+        p2 += tg;
+      }
+      p1 /=N;  p2 /=N;
+      int index = 0;
+      for(const Values::ConstKeyValuePair& key_value : estimates){
+        Key key = key_value.key;
+        Pose3 estimate = estimates.at<Pose3>(key);
+        Pose3 ground = grounds.at<Pose3>(key);
+        Eigen::Vector3d te = estimate.translation().vector();
+        Eigen::Vector3d tg = ground.translation().vector();
+        q1[index] = te - p1;
+        q2[index] = tg - p2;
+        index++;
+      }
+      Eigen::Matrix3d W = Eigen::Matrix3d::Zero();
+      for(int i =0;i < N;i++)
+      {
+        W += q2[i] * q1[i].transpose();
+      }
+      //SVD
+      Eigen::JacobiSVD<Eigen::Matrix3d> svd(W , Eigen::ComputeFullU|Eigen::ComputeFullV);
+      Eigen::Matrix3d U = svd.matrixU();
+      Eigen::Matrix3d V = svd.matrixV();
+      Eigen::Matrix3d R_ = U*V.transpose();
+      Eigen::Vector3d t_ = p2 - R_*p1;
+      Rot3 R(R_);
+      Point3 t(t_);
+      Pose3 T_ge (R, t);
+      for(const Values::ConstKeyValuePair& key_value : estimates){
+        Key key = key_value.key;
+        Pose3 estimate = T_ge * estimates.at<Pose3>(key);
+        estimates.update(key, estimate);
+      }
+    }
+
+/**
+ *  @brief  ATE error
+ */
+    double ateError(gtsam::Values estimates, gtsam::Values grounds ){
+      double error_t = 0;
+      for(const Values::ConstKeyValuePair& key_value : estimates){
+        Key key = key_value.key;
+        Pose3 ground = grounds.at<Pose3>(key);
+        Pose3 estimate = estimates.at<Pose3>(key);
+        Point3 t1 = estimate.translation();
+        Point3 t2 = ground.translation();
+        double delta_t = t1.distance(t2);
+        error_t += delta_t*delta_t;
+      }
+      double ave_t = error_t / grounds.size();
+      return sqrt(ave_t);
+    }
+
+/**
+ *  @brief  ARE error
+ */
+    double areError(gtsam::Values estimates, gtsam::Values grounds ){
+      double error_R = 0;
+      for(const Values::ConstKeyValuePair& key_value : estimates){
+        Key key = key_value.key;
+        Pose3 ground = grounds.at<Pose3>(key);
+        Pose3 estimate = estimates.at<Pose3>(key);
+        Rot3 r1 = estimate.rotation();
+        Rot3 r2 = ground.rotation();
+        Rot3 r2_tr1 = r2.inverse() * r1;
+        Vector3 rv = Rot3::Logmap(r2_tr1);
+        double delta_r = rv.norm();
+        error_R += delta_r*delta_r;
+      }
+      double ave_R = error_R / grounds.size();
+      return sqrt(ave_R);
+    }
+
+
+
   std::pair<double, double> evaluateEstimates(const size_t &nr_robots,
                                               const gtsam::GraphAndValues &full_graph_and_values,
                                               const gtsam::noiseModel::Diagonal::shared_ptr &prior_model,
                                               const gtsam::noiseModel::Isotropic::shared_ptr &model,
                                               const bool &use_between_noise,
-                                              const gtsam::Values &distributed_estimates) {
+                                              gtsam::Values &distributed_estimates) {
     ////////////////////////////////////////////////////////////////////////////////
     // Extract full graph and add prior
     ////////////////////////////////////////////////////////////////////////////////
@@ -532,6 +619,10 @@ namespace evaluation_utils{
     double distributed_error = chordal_graph.error(distributed_estimates);
     std::cout << "Distributed Error: " << distributed_error << std::endl;
 
+    alignPose(full_initial,chordal_GN);
+    alignPose(distributed_estimates,chordal_GN);
+    std::cout << "Initial Translation Error: " << ateError(full_initial, chordal_GN) <<"  Rotation Error: " << areError(full_initial, chordal_GN) <<endl;
+    std::cout << "Distributed Translation Error: " << ateError(distributed_estimates, chordal_GN) <<"  Rotation Error: " << areError(distributed_estimates, chordal_GN) <<endl;
     return std::make_pair(centralized_error, distributed_error);
   }
 }

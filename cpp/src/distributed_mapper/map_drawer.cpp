@@ -33,7 +33,6 @@ namespace distributed_mapper{
         for(DistributedMapper& distMapper: distMappers){
             color+=colorStep;
             NonlinearFactorGraph graph = distMapper.currentGraph();
-            //distMapper.retractPose3Global4plot();
             Values estimate = distMapper.currentEstimate();
             Values neighbors = distMapper.neighbors();
             char robotName = distMapper.robotName();

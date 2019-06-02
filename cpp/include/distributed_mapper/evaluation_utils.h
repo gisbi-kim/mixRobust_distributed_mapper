@@ -14,6 +14,9 @@
 #include <gtsam/inference/Symbol.h>
 #include <boost/lexical_cast.hpp>
 #include <fstream>      // std::fstream
+#include<cmath>
+#include <Eigen/Core>
+#include <Eigen/Geometry>
 
 namespace distributed_mapper{
 
@@ -185,7 +188,7 @@ namespace distributed_mapper{
                                                 const gtsam::noiseModel::Diagonal::shared_ptr& prior_model,
                                                 const gtsam::noiseModel::Isotropic::shared_ptr& model,
                                                 const bool& use_between_noise,
-                                                const gtsam::Values& distributed_estimates);
+                                                gtsam::Values& distributed_estimates);
 
     /**
      * @brief readFullGraph reads the full graph if it is present in the directory, otherwise creates it
@@ -203,7 +206,18 @@ namespace distributed_mapper{
      */
     void copyInitial(const size_t& nr_robots, const std::string& data_dir);
 
-
+/**
+ * @brief align the pose
+ * */
+      void alignPose(gtsam::Values& estimates, gtsam::Values grounds);
+/**
+ *  @brief  ATE error
+ */
+      double ateError(gtsam::Values estimates, gtsam::Values grounds);
+/**
+ *  @brief  ARE error
+ */
+      double areError(gtsam::Values estimates, gtsam::Values grounds );
   }
 
 }

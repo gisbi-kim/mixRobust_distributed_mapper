@@ -412,10 +412,11 @@ void optimizePose(std::vector< boost::shared_ptr<DistributedMapper> >& dist_mapp
 
     if(debug)
       std::cout << "[optimizePoses] Loop over robots complete"  << std::endl;
-      sleep(3);
+      //sleep(3);
      mapDrawer->setDistMappers(dist_mappers);
 
 
+     // sleep(100);
     // If DistributeJacobi/Jacobi OverRelaxation, we update all the robots at the end of each iteration
     for(size_t robot: ordering){   // Iterate over each robot
       if(dist_mappers[robot]->update_type_ == DistributedMapper::postUpdate){

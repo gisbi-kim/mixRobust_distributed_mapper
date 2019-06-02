@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 project(distributed-mapper)
-set(CMAKE_BUILD_TYPE "Debug")
+set(CMAKE_BUILD_TYPE "Release")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -o2 -fPIC -pthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -o3 -fPIC -pthread")
 add_definitions(-DLOG_DIR="${PROJECT_SOURCE_DIR}/..")
 
 ###########################################################################
@@ -16,6 +16,7 @@ message("GTSAM Libraries: ${GTSAM_LIBRARIES}")
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${GTSAM_DIR}/../GTSAMCMakeTools")
 include(GtsamTesting)
 
+include_directories(/usr/include/eigen3)
 ###########################################################################
 # Find Boost
 find_package(Boost COMPONENTS serialization filesystem system program_options thread REQUIRED)

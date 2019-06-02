@@ -190,7 +190,7 @@ DistributedMapper::estimateRotation(){
         if(use_DCS_){
           Vector r0 = linearized_rotation_.at(key0);
           Vector errorV = M9*r0 - r1;
-          //  std::cout<< errorV.norm()<<std::endl;
+          //std::cout<< errorV.norm()<<std::endl;
           reweightDCS4rot(M9, r1, errorV);
         }
         rot_subgraph.add(key0, M9, r1, model);

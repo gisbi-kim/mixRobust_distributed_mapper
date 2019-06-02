@@ -18,6 +18,7 @@ std::tuple<double, double, int> runDistributedMapper(const size_t& nr_robots, co
                                                      const bool& use_PCM, const bool& use_DCS, const double& DCS_phir, const double& DCS_phip, const bool& use_PCMHeu) {
 
   vector <GraphAndValues> graph_and_values_vec; // vector of all graphs and initials
+  vector <GraphAndValues> graph_and_values_vecTrue;   // vector of all true graphs and initials
 
   // Config
   string robot_names_;
@@ -57,6 +58,10 @@ std::tuple<double, double, int> runDistributedMapper(const size_t& nr_robots, co
     string data_file_i = data_dir + boost::lexical_cast<string>(robot) + ".g2o";
     GraphAndValues graph_and_values_g2o = readG2o(data_file_i, true);
     Values initial = *(graph_and_values_g2o.second);
+      //read true g2o files
+      string data_file_true_i = data_dir +"../"+ boost::lexical_cast<string>(robot) + ".g2o";
+      GraphAndValues graph_and_values_true = readG2o(data_file_true_i, true);
+      graph_and_values_vecTrue.push_back(graph_and_values_true);
 
     // Continue if empty
     if (initial.empty()) {
@@ -143,13 +148,13 @@ std::tuple<double, double, int> runDistributedMapper(const size_t& nr_robots, co
         cout << "Done Aggregating" << endl;
 
       GraphAndValues full_graph_and_values = evaluation_utils::readFullGraph(nr_robots, graph_and_values_vec);
-
+      GraphAndValues full_graph_and_values_true = evaluation_utils::readFullGraph(nr_robots, graph_and_values_vecTrue);
       // Write optimized full graph
       string dist_optimized = data_dir + "fullGraph_optimized.g2o";
       writeG2o(*(full_graph_and_values.first), distributed, dist_optimized);
 
       auto errors = evaluation_utils::evaluateEstimates(nr_robots,
-          full_graph_and_values,
+          full_graph_and_values_true,
           prior_model,
           model,
           use_between_noise,
