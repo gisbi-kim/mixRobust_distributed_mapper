@@ -4,7 +4,7 @@ clc
 
 %% settings
 ori_folder = horzcat(pwd, '/../test_data/datasets/city10000/originalDataset/part_city10000.g2o');
-spilt_folder = horzcat(pwd, '/../test_data/datasets/city10000/spiltPart0020/');
+spilt_folder = horzcat(pwd, '/../test_data/datasets/city10000/PCMdata/');
 mkdir(spilt_folder);
 number_of_robots = 2;
 id_offset = 96;
@@ -33,6 +33,6 @@ end
  
  %% generate inter loopclosure outliers
  [ spoiled_measurements, spoiled_edges_id ,loopclosures] = generateGroupOutliers( robot_edges_id, robots_offsets, ...
-    trajectory_size, 0,  0, 20);
+    trajectory_size, 10,  10, 80);
  writeG2oDataset3D(file_names{1}, spoiled_measurements, spoiled_edges_id, [], 0, 1 );
  writeG2oDataset3D(file_names{2}, spoiled_measurements, spoiled_edges_id, [], 0, 1 );

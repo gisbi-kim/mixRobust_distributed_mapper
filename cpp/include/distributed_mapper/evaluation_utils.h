@@ -188,7 +188,7 @@ namespace distributed_mapper{
                                                 const gtsam::noiseModel::Diagonal::shared_ptr& prior_model,
                                                 const gtsam::noiseModel::Isotropic::shared_ptr& model,
                                                 const bool& use_between_noise,
-                                                gtsam::Values& distributed_estimates);
+                                                gtsam::Values& distributed_estimates,const std::string& data_dir);
 
     /**
      * @brief readFullGraph reads the full graph if it is present in the directory, otherwise creates it

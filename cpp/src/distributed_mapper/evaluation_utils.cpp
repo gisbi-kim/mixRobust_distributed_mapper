@@ -314,7 +314,7 @@ namespace evaluation_utils{
     cen_FG.push_back(first_key_prior);
 
     Values chordal_GN = initial;
-    for (size_t iter = 0; iter < 5; iter++) {
+    for (size_t iter = 0; iter < 50; iter++) {
       GaussianFactorGraph chordal_GFG = *(cen_FG.linearize(chordal_GN));
       VectorValues chordal_vector_values = chordal_GFG.optimize(); // optimize
       chordal_GN = retractPose3Global(chordal_GN, chordal_vector_values);
@@ -571,7 +571,7 @@ namespace evaluation_utils{
                                               const gtsam::noiseModel::Diagonal::shared_ptr &prior_model,
                                               const gtsam::noiseModel::Isotropic::shared_ptr &model,
                                               const bool &use_between_noise,
-                                              gtsam::Values &distributed_estimates) {
+                                              gtsam::Values &distributed_estimates,const std::string& data_dir) {
     ////////////////////////////////////////////////////////////////////////////////
     // Extract full graph and add prior
     ////////////////////////////////////////////////////////////////////////////////
@@ -611,6 +611,9 @@ namespace evaluation_utils{
     Values chordal_GN = centralizedGNEstimation(full_graph_with_prior,
                                                                    model, prior_model,
                                                                    use_between_noise);
+      // Write optimized  GN full graph************************************************************************************
+      string dist_optimized_ = data_dir + "fullGraphGN_optimized.g2o";
+      writeG2o(*(full_graph_and_values.first), chordal_GN, dist_optimized_);
     std::cout << "Centralized Two Stage + GN Error: " << chordal_graph.error(chordal_GN) << std::endl;
 
     ////////////////////////////////////////////////////////////////////////////////

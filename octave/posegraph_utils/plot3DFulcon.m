@@ -36,11 +36,12 @@ for i = 0 : graph.size - 1
                     plot([pose1.x, pose2.x], [pose1.y, pose2.y], 'linewidth', 1.8, 'Color' ,[0 0.8 0])
                 end 
             elseif key1_sym ~= key2_sym
+               %plot([pose1.x, pose2.x], [pose1.y, pose2.y], 'linewidth', 1.8, 'Color' ,[0 0 0.55])
                 % inter loopclosures
                 % 判断该inter回环是否为添加进的outlier
                 error_index = ismember(outlier_loopclosures, [key1+1 key2+1],  'rows');
                 if isempty(find(error_index,1)) == 0
-                    plot([pose1.x, pose2.x], [pose1.y, pose2.y], 'linewidth', 1.8, 'Color' ,[1 0 0])
+                    plot([pose1.x, pose2.x], [pose1.y, pose2.y], 'linewidth',  1, 'Color' ,[0.8 0.78 0.78],'LineStyle', ':')
                     % 筛选出被拒绝的edge
                     for k = 1: size(error_index, 1)
                         if error_index(k) ==1

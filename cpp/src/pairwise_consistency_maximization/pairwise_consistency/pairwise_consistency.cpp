@@ -140,7 +140,7 @@ Eigen::MatrixXi PairwiseConsistency::computeAdjointMatrix() {
                     // Compute the Mahalanobis distance
                     double distance = computeSquaredMahalanobisDistance(consistency_error);
                     // Apply threshold on the chi-squared distribution
-                    if (distance < threshold) {
+                    if (distance < 0.05) {
                         consistency_matrix(u,v) = 1;
                         consistency_matrix(v,u) = 1;
 

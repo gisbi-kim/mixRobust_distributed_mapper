@@ -1,14 +1,17 @@
 %YAML:1.0
 #Dataset.dir: /media/D/robust_distributed_mapper/test_data/datasets/CSAIL/spilt_0.2random/
+#Dataset.dir: /media/D/robust_distributed_mapper/test_data/datasets/CSAIL/spilt/
 #Dataset.dir: /media/D/robust_distributed_mapper/test_data/distributed_mapper/example_49robots/
-Dataset.dir: /media/D/robust_distributed_mapper/test_data/datasets/city10000/spiltPart0020/
+#goodinitial有异常边，initial1无异常边，改变phir的值对DCS影响很大，
+Dataset.dir: /media/D/robust_distributed_mapper/test_data/datasets/city10000/goodinitial1/
+#Dataset.dir: /media/D/robust_distributed_mapper/test_data/datasets/city10000/PCMdata/
 Robots.number: 2
-Max.iter: 100000
-Rotation.threshold: 1e-2
-Pose.threshold: 1e-2
+Max.iter: 1000000
+Rotation.threshold: 1e-1
+Pose.threshold: 1e-1
 Confidence.probability: 0.99
 PCM: 0
-DCS: 1
-DCS.phir: 0.4
+DCS: 0
+DCS.phir: 0.05
 DCS.phip: 20
-PCMHeu: 0
+PCMHeu: 1

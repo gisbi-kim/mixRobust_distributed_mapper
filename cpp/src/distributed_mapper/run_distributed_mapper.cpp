@@ -158,7 +158,8 @@ std::tuple<double, double, int> runDistributedMapper(const size_t& nr_robots, co
           prior_model,
           model,
           use_between_noise,
-          distributed);
+          distributed,
+          data_dir);
 
       return std::make_tuple(errors.first, errors.second, max_clique_size);
     }
